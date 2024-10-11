@@ -32,10 +32,15 @@ header {
     text-align: left;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
-
 .logo img {
-    height: 50px;
+    width: 150px; 
+    height: auto; 
 }
+
+.logo a {
+    display: inline-block;
+}
+
 
 header h1 {
     font-size: 2.5rem;
@@ -60,10 +65,10 @@ nav {
 
 /* Hero Section */
 .hero {
-    background-image: url('tele5.jpg'); 
+    background-image: url('/images/tele5.jpg'); 
     background-size: cover;
     background-position: center;
-    color: rgb(60, 29, 145);
+    color: rgb(152, 148, 161);
     text-align: center;
     padding: 100px 20px;
     display:flex;
