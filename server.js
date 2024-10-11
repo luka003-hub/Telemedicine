@@ -1,14 +1,11 @@
-const mongoose = require('mongoose'); // Import Mongoose
+const mongoose = require('mongoose');
 
 // MongoDB connection URI (for local or cloud database)
 const mongoURI = 'mongodb://localhost:27017/Beta'; // Local database URI
-// For MongoDB Atlas (Cloud):
-// const mongoURI = 'mongodb+srv://<username>:<password>@cluster.mongodb.net/yourDatabaseName?retryWrites=true&w=majority';
 
 // Connect to MongoDB using Mongoose
 mongoose.connect(mongoURI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
+   
 }).then(() => {
     console.log('Connected to MongoDB successfully!');
 }).catch((err) => {
