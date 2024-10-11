@@ -60,12 +60,17 @@ nav {
 
 /* Hero Section */
 .hero {
-    background-image: url('hero-image.jpg'); 
+    background-image: url('tele5.jpg'); 
     background-size: cover;
     background-position: center;
     color: rgb(60, 29, 145);
     text-align: center;
     padding: 100px 20px;
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
 }
 
 .hero h2 {
@@ -74,9 +79,34 @@ nav {
 }
 
 .hero p {
-    font-size: 1.2rem;
-    margin-bottom: 40px;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
 }
+
+/* Marquee styles */
+.marquee {
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.6); 
+    color: #fff;
+    padding: 10px 0;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.marquee p {
+    display: inline-block;
+    animation: scroll 10s linear infinite;
+}
+
+@keyframes scroll {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(-100%);
+    }
+}
+
 
 .hero button {
     background-color: #4CAF50;
