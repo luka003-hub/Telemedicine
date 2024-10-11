@@ -10,6 +10,9 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+// Serve static files from the 'public' directory
+app.use(express.static('public'));
+
 // View engine to EJS
 app.set('view engine', 'ejs');
 
