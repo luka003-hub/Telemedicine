@@ -10,6 +10,10 @@
   "author": "LUKA",
   "license": "ISC",
   "dependencies": {
+    "axios": "^1.7.7",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.3",
+    "ejs": "^3.1.10",
     "express": "^4.21.1",
     "mongoose": "^8.7.1"
   }
