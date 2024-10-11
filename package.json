@@ -1,0 +1,12 @@
+{
+  "name": "telemedicine",
+  "version": "1.0.0",
+  "description": "tele_medicine ",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "LUKA",
+  "license": "ISC"
+}
