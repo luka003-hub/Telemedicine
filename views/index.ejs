@@ -3,6 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <link rel="stylesheet" href="/styles/tasks.css">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>BETA TELEMEDICS</title>
+    <!-- Link to main.css for styling -->
+    <link rel="stylesheet" href="/styles/main.css">
 </head>
+<body>
+    <header>
+        <div class="navbar">
+            <div class="logo">
+                <a href="/">Telemedicine</a>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/services">Services</a></li>
+                    <li><a href="/doctors">Doctors</a></li>
+                    <li><a href="/about">About Us</a></li>
+                    <li><a href="/contact">Contact</a></li>
+                    <li><a href="/login" class="btn-login">Login</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Your Health, Our Priority</h1>
+                <p>Connect with certified doctors anytime, anywhere.</p>
+                <a href="/appointments" class="btn-primary">Book an Appointment</a>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section class="services">
+            <h2>Our Services</h2>
+            <div class="services-container">
+                <div class="service-item">
+                    <img src="/images/consultation.svg" alt="Consultation">
+                    <h3>Online Consultations</h3>
+                    <p>Speak with our medical professionals from the comfort of your home.</p>
+                </div>
+                <div class="service-item">
+                    <img src="/images/diagnostics.svg" alt="Diagnostics">
+                    <h3>Diagnostics</h3>
+                    <p>Get access to reliable lab diagnostics and health reports.</p>
+                </div>
+                <div class="service-item">
+                    <img src="/images/prescriptions.svg" alt="Prescriptions">
+                    <h3>Prescription Services</h3>
+                    <p>Receive prescriptions digitally and get medications delivered to your door.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Featured Doctors Section -->
+        <section class="featured-doctors">
+            <h2>Meet Our Doctors</h2>
+            <div class="doctors-container">
+                <div class="doctor-card">
+                    <img src="/images/jg.jpg" alt="Doctor">
+                    <h3>Dr. James Gitonga</h3>
+                    <p>Dental Technologist</p>
+                </div>
+                <div class="doctor-card">
+                    <img src="/images/gg.jpg" alt="Doctor">
+                    <h3>Dr. George Gitonga</h3>
+                    <p>Optician</p>
+                </div>
+                <div class="doctor-card">
+                    <img src="/images/jm.jpg" alt="Doctor">
+                    <h3>Dr. John Murebi</h3>
+                    <p>Physiotherapist</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Call to Action -->
+        <section class="cta">
+            <h2>Ready to take control of your health?</h2>
+            <a href="/register" class="btn-primary">Join Us Today</a>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; <%= new Date().getFullYear() %> Telemedicine Platform. All Rights Reserved.</p>
+            <ul>
+                <li><a href="/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/terms">Terms of Service</a></li>
+            </ul>
+        </div>
+    </footer>
+</body>
+</html>
