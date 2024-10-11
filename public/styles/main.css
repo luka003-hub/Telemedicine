@@ -33,6 +33,10 @@ header {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
+.logo img {
+    height: 50px;
+}
+
 header h1 {
     font-size: 2.5rem;
 }
@@ -87,6 +91,49 @@ nav {
 .hero button:hover {
     background-color: #45a049;
 }
+
+.services {
+    text-align: center;
+    padding: 50px 0;
+}
+
+.services-container {
+    display: flex;
+    justify-content: center; 
+    gap: 20px; 
+    flex-wrap: wrap; 
+}
+
+
+.service-item {
+    flex: 1;
+    min-width: 250px; 
+    max-width: 300px; 
+    padding: 20px;
+    background-color: #f8f8f8; 
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+    text-align: center;
+}
+
+.service-item img {
+    max-width: 100%; 
+    height: auto;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+.service-item h3 {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-size: 1.5em;
+}
+
+.service-item p {
+    font-size: 1em;
+    color: #666;
+}
+
 
 /* Appointment Section */
 .appointment-section {
