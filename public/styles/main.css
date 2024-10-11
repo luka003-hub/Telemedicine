@@ -29,7 +29,7 @@ header {
     background-color: #004d40;
     color: white;
     padding: 20px;
-    text-align: center;
+    text-align: left;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
@@ -59,7 +59,7 @@ nav {
     background-image: url('hero-image.jpg'); 
     background-size: cover;
     background-position: center;
-    color: rgb(255, 255, 255);
+    color: rgb(60, 29, 145);
     text-align: center;
     padding: 100px 20px;
 }
@@ -76,7 +76,7 @@ nav {
 
 .hero button {
     background-color: #4CAF50;
-    color: rgb(255, 255, 255);
+    color: rgb(107, 39, 128);
     padding: 15px 30px;
     font-size: 1.2rem;
     border: none;
