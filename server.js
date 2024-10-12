@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 const User = require('./Models/user'); 
 
 
+
 // Express app
 const app = express();
 
@@ -32,13 +33,13 @@ mongoose.connect(mongoURI, {
 
 // Route to render the index page
 app.get('/', (req, res) => {
-    res.render('index'); // Renders the index.ejs file
+    res.render('index'); 
 });
 
 
 // Route to render login page
 app.get('/login', (req, res) => {
-    res.render('login'); // Renders the login.ejs page
+    res.render('login'); 
 });
 
 // Login POST route to handle login authentication
@@ -59,8 +60,10 @@ app.post('/login', async (req, res) => {
             return res.status(400).send('Invalid email or password');
         }
 
+
         // Redirect to landing page on successful login
         res.redirect('/landing');
+
     } catch (error) {
         console.error('Server error:', error);
         res.status(500).send('Server Error');
@@ -92,7 +95,7 @@ app.post('/signup', async (req, res) => {
 
         // Hash the password
         const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(password, salt);
+        const hashedPassword = await bcrypt.hash(password, 10);
 
         // Save user to the database
         const newUser = new User({

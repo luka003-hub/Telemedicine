@@ -33,20 +33,25 @@ a {
 }
 
 /* Header */
+/* Header */
 header {
     background-color: #004d40;
     color: white;
-    padding: 20px;
+    max-height: 200px;
+    padding: 30px;
     text-align: left;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 .logo img {
     width: 150px; 
     height: auto; 
+    border-radius: 50%; 
+    object-fit: cover; 
+    overflow: hidden; 
 }
 
 .logo a {
-    display: inline-block;
+    display: flex;
 }
 
 
@@ -54,21 +59,31 @@ header h1 {
     font-size: 2.5rem;
 }
 
-/* Navigation Bar */
-nav {
-    display: flex;          
-    justify-content: flex-end;  
+/* Style for the navigation */
+header nav {
+    flex: 1; 
 }
 
-.nav-list {
-    list-style: none;     
-    padding: 0;           
-    margin: 0;          
-    display: flex;       
+header nav ul {
+    list-style: none; 
+    display: flex; 
+    justify-content: flex-end; 
+    margin: 0; 
+    padding: 0; 
+}
+header nav ul li {
+    margin-left: 15px; 
+    
 }
 
-.nav-list li {
-    margin-left: 20px;   
+header nav ul li a {
+    color: #fff; 
+    text-decoration: none; 
+    padding: 5px; 
+}
+
+header nav ul li a:hover {
+    text-decoration: underline; 
 }
 
 /* Hero Section */
