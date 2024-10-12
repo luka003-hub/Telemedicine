@@ -4,7 +4,15 @@
     padding: 0;
     box-sizing: border-box;
 }
-
+.logincontainer, .signupcontainer {
+    width: 70%;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+        border-radius: 10px}
+        
 /* Body and Global Styles */
 body {
     font-family: 'Helvetica', 'Arial', sans-serif;

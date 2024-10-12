@@ -35,33 +35,84 @@ app.get('/', (req, res) => {
     res.render('index'); // Renders the index.ejs file
 });
 
-// POST /login route to handle login
+
+// Route to render login page
+app.get('/login', (req, res) => {
+    res.render('login'); // Renders the login.ejs page
+});
+
+// Login POST route to handle login authentication
 app.post('/login', async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        // 1. Find the user by email
+        // Find user by email
         const user = await User.findOne({ email });
-
-        // 2. If user is not found, send error
         if (!user) {
             return res.status(400).send('Invalid email or password');
         }
 
-        // 3. Check if the entered password matches the hashed password
-        const isMatch = await user.matchPassword(password);
+        // Check if the entered password matches
+        const isMatch = await bcrypt.compare(password, user.password);
 
         if (!isMatch) {
             return res.status(400).send('Invalid email or password');
         }
 
-        // 4. If password matches, send success response
-        res.send('Login successful');
+        // Redirect to landing page on successful login
+        res.redirect('/landing');
+    } catch (error) {
+        console.error('Server error:', error);
+        res.status(500).send('Server Error');
+    }
+});
+
+// Routes
+app.get('/signup', (req, res) => {
+    res.render('signup');
+});
+
+app.post('/signup', async (req, res) => {
+    const { name, email, password, confirmPassword } = req.body;
+
+    // Simple validation
+    if (!name || !email || !password || !confirmPassword) {
+        return res.status(400).send('Please fill in all fields');
+    }
+    if (password !== confirmPassword) {
+        return res.status(400).send('Passwords do not match');
+    }
+
+    try {
+        // Check if user already exists
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+            return res.status(400).send('User with that email already exists');
+        }
+
+        // Hash the password
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
+
+        // Save user to the database
+        const newUser = new User({
+            name,
+            email,
+            password: hashedPassword
+        });
+
+        await newUser.save();
+        res.send('User registered successfully!');
 
     } catch (error) {
         console.error(error);
         res.status(500).send('Server error');
     }
+});
+
+// Route to render landing page after successful login
+app.get('/landing', (req, res) => {
+    res.render('landing'); // Renders the landing.ejs page
 });
 
 // Start Express server
