@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const User = require('./Models/user'); 
+const Appointment = require('./Models/Appointment');
 
 
 
@@ -114,6 +115,45 @@ app.post('/signup', async (req, res) => {
         res.status(500).send('Server error');
     }
 });
+
+// Route to render the booking page
+app.get('/book-appointment', (req, res) => {
+    res.render('book-appointment');
+});
+
+// POST route to handle appointment booking
+app.post('/book-appointment', async (req, res) => {
+    const { userId, doctor, date, time } = req.body;
+
+    try {
+        // Create a new appointment
+        const newAppointment = new Appointment({
+            user: userId, 
+            doctor,
+            date,
+            time
+        });
+
+        // Save the appointment to the database
+        await newAppointment.save();
+
+        // Send a success response or redirect to a success page
+        res.send('Appointment booked successfully!');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Server error');
+    }
+});
+
+
+app.get('/book-appointment', (req, res) => {
+    const userId = req.user ? req.user._id : null; // Assuming `req.user` contains the logged-in user's data
+    if (!userId) {
+        return res.redirect('/login'); // Redirect to login if not authenticated
+    }
+    res.render('book-appointment', { userId });
+});
+
 
 // Route to render landing page after successful login
 app.get('/landing', (req, res) => {

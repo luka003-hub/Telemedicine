@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Appointment</title>
+    <link rel="stylesheet" href="/styles/booking.css"> <!-- Ensure your CSS path is correct -->
+</head>
+<body>
+    <form action="/book-appointment" method="POST">
+        <!-- <input type="hidden" name="userId" value="<%= userId %>"> -->
+        <label for="doctor">Choose Doctor:</label>
+        <select name="doctor" required>
+            <option value="Dr. Smith">Dr. Smith</option>
+            <option value="Dr. Johnson">Dr. Johnson</option>
+            <option value="Dr. Lee">Dr. Lee</option>
+        </select>
+        <label for="date">Choose Date:</label>
+        <input type="date" name="date" required>
+        <label for="time">Choose Time:</label>
+        <input type="time" name="time" required>
+        <button type="submit">Book Appointment</button>
+    </form>
+    </body>
+    </html>
