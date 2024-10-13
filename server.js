@@ -42,70 +42,72 @@ app.get('/login', (req, res) => {
     res.render('login'); 
 });
 
-// Login POST route to handle login authentication
+// Login route
 app.post('/login', async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        // Find user by email
+        // 1. Find the user by email
         const user = await User.findOne({ email });
+
+        // 2. If user is not found, send error
         if (!user) {
             return res.status(400).send('Invalid email or password');
         }
 
-        // Check if the entered password matches
+        // 3. Check if the entered password matches the hashed password
         const isMatch = await bcrypt.compare(password, user.password);
 
         if (!isMatch) {
             return res.status(400).send('Invalid email or password');
         }
 
+        // 4. If password matches, send success response or redirect
+        res.send('Login successful');
 
-        // Redirect to landing page on successful login
-        res.redirect('/landing');
-
+        // Optionally, you could redirect the user to a different page
+        // res.redirect('/dashboard'); // example redirect to a dashboard page
     } catch (error) {
-        console.error('Server error:', error);
-        res.status(500).send('Server Error');
+        console.error(error);
+        res.status(500).send('Server error');
     }
 });
 
-// Routes
+
+// Signup route
+
 app.get('/signup', (req, res) => {
     res.render('signup');
 });
 
 app.post('/signup', async (req, res) => {
-    const { name, email, password, confirmPassword } = req.body;
-
-    // Simple validation
-    if (!name || !email || !password || !confirmPassword) {
-        return res.status(400).send('Please fill in all fields');
-    }
-    if (password !== confirmPassword) {
-        return res.status(400).send('Passwords do not match');
-    }
+    const { email, password, confirmPassword } = req.body;
 
     try {
-        // Check if user already exists
-        const existingUser = await User.findOne({ email });
-        if (existingUser) {
-            return res.status(400).send('User with that email already exists');
+        // Check if the passwords match
+        if (password !== confirmPassword) {
+            return res.status(400).send('Passwords do not match');
         }
 
-        // Hash the password
-        const salt = await bcrypt.genSalt(10);
+        // Check if the user already exists
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+            return res.status(400).send('Email already exists');
+        }
+
+        // Hash the password before saving to the database
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Save user to the database
+        // Create a new user
         const newUser = new User({
-            name,
             email,
-            password: hashedPassword
+            password: hashedPassword,
         });
 
+        // Save the user to the database
         await newUser.save();
-        res.send('User registered successfully!');
+        
+        res.status(201).send('User registered successfully');
 
     } catch (error) {
         console.error(error);
