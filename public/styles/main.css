@@ -36,7 +36,7 @@ a {
 header {
     background-color: #004d40;
     color: white;
-    max-height: 200px;
+    max-height: 150px;
     padding: 30px;
     text-align: center;
     display: flex;
@@ -46,9 +46,11 @@ header {
 }
 
 .logo img {
-    width: 150px; 
-    height: auto; 
-    border-radius: 50%; 
+    max-width: 100%;
+    max-height: 100%;
+    width: auto; /* Allow width to adjust as needed */
+    height: 150px; /* Allow height to adjust as needed */
+    border-radius: 80%; 
     object-fit: cover; 
     overflow: hidden; 
 }
