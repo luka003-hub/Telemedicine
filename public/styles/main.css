@@ -104,6 +104,7 @@ header nav ul li a:hover {
 
 /* Hero Section */
 .hero {
+   
     background-image: url('/images/tele5.jpg'); 
     background-size: cover;
     background-position: center;
@@ -116,6 +117,7 @@ header nav ul li a:hover {
     justify-content: center;
     align-items: center;
     text-align: center;
+    
 }
 
 .hero h2 {
@@ -128,30 +130,31 @@ header nav ul li a:hover {
     margin-bottom: 20px;
 }
 
-/* Marquee styles */
-.marquee {
-    width: 100%;
-    background-color: rgba(0, 0, 0, 0.6); 
-    color: #fff;
-    padding: 10px 0;
-    overflow: hidden;
-    white-space: nowrap;
+.hero-slider {
+    display: flex;
+    animation: slide 20s infinite; 
+    height: 100%;
 }
 
-.marquee p {
-    display: inline-block;
-    animation: scroll 10s linear infinite;
+.slide {
+    min-width: 100%; 
+    height: auto; 
+    max-height: 100%; 
+    object-fit: cover; 
+    transition: opacity 1s ease-in-out;
 }
 
-@keyframes scroll {
-    from {
-        transform: translateX(100%);
-    }
-    to {
-        transform: translateX(-100%);
-    }
-}
 
+@keyframes slide {
+    0% { transform: translateX(0); }
+    20% { transform: translateX(0); }
+    25% { transform: translateX(-100%); }
+    45% { transform: translateX(-100%); }
+    50% { transform: translateX(-200%); }
+    70% { transform: translateX(-200%); }
+    75% { transform: translateX(0); }
+    100% { transform: translateX(0); }
+}
 
 .hero button {
     background-color: #4CAF50;
@@ -167,7 +170,7 @@ header nav ul li a:hover {
     background-color: #45a049;
 }
 
-.services {
+.services { 
     text-align: center;
     padding: 50px 0;
     margin-top: 100px; 
