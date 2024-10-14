@@ -1,17 +1,31 @@
-// routes/appointment.js
 const express = require('express');
 const router = express.Router();
+const Appointment = require('../Models/Appointment');
+const { isAuthenticated } = require('../Middleware/auth');
 
-// Sample route for booking an appointment
-router.get('/book-appointment', (req, res) => {
-    res.render('book-appointment'); // Ensure you have this view file created
+// Route to render the booking form
+router.get('/book', isAuthenticated, (req, res) => {
+    res.render('book-appointment', { user: req.user });
 });
 
-router.post('/book-appointment', (req, res) => {
-    const { userId, doctor, date, time } = req.body;
-    // Logic to save the appointment to the database can be added here
-    res.send(`Appointment booked with Dr. ${doctor} on ${date} at ${time}`);
+// Route to handle form submission
+router.post('/book', isAuthenticated, async (req, res) => {
+    const { doctorName, appointmentDate, reason } = req.body;
+    
+    try {
+        const newAppointment = new Appointment({
+            userId: req.user._id,
+            doctorName,
+            appointmentDate,
+            reason
+        });
+        
+        await newAppointment.save();
+        res.redirect('/my-appointments'); // Redirect user to their appointments
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Server Error: Unable to book appointment.");
+    }
 });
 
 module.exports = router;
-

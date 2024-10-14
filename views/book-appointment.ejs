@@ -4,29 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Book Appointment</title>
-    <link rel="stylesheet" href="/styles/booking.css"> <!-- Ensure your CSS path is correct -->
+    <link rel="stylesheet" href="/styles/booking.css"> 
 </head>
 <body>
     <form action="/book-appointment" method="POST">
-        <input type="hidden" name="userId" value="<%= userId %>"> <!-- Ensure userId is passed correctly -->
-        
+        <input type="hidden" name="userId" value="<%= userId %>"> <!-- Use the user ID if needed -->
+    
         <label for="doctor">Choose Doctor:</label>
         <select name="doctor" required>
-            <option value="Dr. John Doe">Dr. John Doe</option>
-            <option value="Dr. Jane Smith">Dr. Jane Smith</option>
-            <!-- Add more doctors as needed -->
+            <option value="Dr. Smith">Dr. Smith</option>
+            <option value="Dr. Johnson">Dr. Johnson</option>
+            <!-- Add more options as needed -->
         </select>
-        
+    
         <label for="date">Choose Date:</label>
         <input type="date" name="date" required>
-        
+    
         <label for="time">Choose Time:</label>
         <input type="time" name="time" required>
-        
+    
         <label for="reason">Reason for Appointment:</label>
-        <textarea name="reason" required></textarea>
-        
+        <textarea name="reason" rows="4" required></textarea>
+    
         <button type="submit">Book Appointment</button>
-    </form>
+    </form>    
 </body>
 </html>    
