@@ -1,13 +1,33 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
+const session = require('express-session');
+const bodyParser = require('body-parser');
+const path = require('path');
 const User = require('./Models/user'); 
-const Appointment = require('./Models/Appointment');
+const isAuthenticated = require('./Models/auth');
+const appointmentRoutes = require('./routes/appointment');
 
 
 
 // Express app
 const app = express();
+
+// Middleware
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(session({
+    secret: 'your_secret_key',
+    resave: false,
+    saveUninitialized: true,
+}));
+
+// Set view engine
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+
+// Serve static files
+app.use(express.static(path.join(__dirname, 'public')));
+
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -43,31 +63,33 @@ app.get('/login', (req, res) => {
     res.render('login'); 
 });
 
-// Login route
 app.post('/login', async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        // 1. Find the user by email
+        // Step 1: Find the user by email
         const user = await User.findOne({ email });
 
-        // 2. If user is not found, send error
+        // Step 2: If user is not found, send error
         if (!user) {
             return res.status(400).send('Invalid email or password');
         }
 
-        // 3. Check if the entered password matches the hashed password
+        // Step 3: Check if the entered password matches the hashed password in the database
         const isMatch = await bcrypt.compare(password, user.password);
 
+        // Step 4: If the passwords do not match, send error
         if (!isMatch) {
             return res.status(400).send('Invalid email or password');
         }
 
-        // 4. If password matches, send success response or redirect
+        // Step 5: If password matches, send success response
         res.send('Login successful');
+        
+        // If successful, redirect to a dashboard or home page
+        res.redirect('/dashboard');
 
-        // Optionally, you could redirect the user to a different page
-        // res.redirect('/dashboard'); // example redirect to a dashboard page
+
     } catch (error) {
         console.error(error);
         res.status(500).send('Server error');
@@ -81,34 +103,43 @@ app.get('/signup', (req, res) => {
     res.render('signup');
 });
 
+// Render the signup form
+app.get('/signup', (req, res) => {
+    res.render('signup'); // Make sure signup.ejs is present in the views folder
+});
+
+// Handle signup form submission
 app.post('/signup', async (req, res) => {
-    const { email, password, confirmPassword } = req.body;
+    const { name, email, password, confirmPassword } = req.body;
+
+    // Check if password and confirmPassword match
+    if (password !== confirmPassword) {
+        return res.status(400).send('Passwords do not match');
+    }
 
     try {
-        // Check if the passwords match
-        if (password !== confirmPassword) {
-            return res.status(400).send('Passwords do not match');
-        }
-
-        // Check if the user already exists
-        const existingUser = await User.findOne({ email });
-        if (existingUser) {
+        // Check if user already exists
+        let user = await User.findOne({ email });
+        if (user) {
             return res.status(400).send('Email already exists');
         }
 
-        // Hash the password before saving to the database
-        const hashedPassword = await bcrypt.hash(password, 10);
-
-        // Create a new user
-        const newUser = new User({
+        // Create new user instance
+        user = new User({
+            name,
             email,
-            password: hashedPassword,
+            password
         });
 
-        // Save the user to the database
-        await newUser.save();
-        
-        res.status(201).send('User registered successfully');
+        // Hash the password before saving
+        const salt = await bcrypt.genSalt(10);
+        user.password = await bcrypt.hash(password, salt);
+
+        // Save user to the database
+        await user.save();
+
+        // Redirect to login page after successful signup
+        res.redirect('/login');
 
     } catch (error) {
         console.error(error);
@@ -116,49 +147,16 @@ app.post('/signup', async (req, res) => {
     }
 });
 
-// Route to render the booking page
-app.get('/book-appointment', (req, res) => {
-    res.render('book-appointment');
-});
+// Middleware
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(session({ secret: 'yourSecretKey', resave: false, saveUninitialized: true }));
 
-// POST route to handle appointment booking
-app.post('/book-appointment', async (req, res) => {
-    const { userId, doctor, date, time } = req.body;
+// Set up EJS for rendering
+app.set('view engine', 'ejs');
 
-    try {
-        // Create a new appointment
-        const newAppointment = new Appointment({
-            user: userId, 
-            doctor,
-            date,
-            time
-        });
-
-        // Save the appointment to the database
-        await newAppointment.save();
-
-        // Send a success response or redirect to a success page
-        res.send('Appointment booked successfully!');
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Server error');
-    }
-});
-
-
-app.get('/book-appointment', (req, res) => {
-    const userId = req.user ? req.user._id : null; // Assuming `req.user` contains the logged-in user's data
-    if (!userId) {
-        return res.redirect('/login'); // Redirect to login if not authenticated
-    }
-    res.render('book-appointment', { userId });
-});
-
-
-// Route to render landing page after successful login
-app.get('/landing', (req, res) => {
-    res.render('landing'); // Renders the landing.ejs page
-});
+// Use the appointment routes
+app.use(appointmentRoutes);
 
 // Start Express server
 const PORT = process.env.PORT || 5000;

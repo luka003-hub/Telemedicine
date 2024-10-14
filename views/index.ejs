@@ -9,24 +9,7 @@
     <link rel="stylesheet" href="/styles/main.css">
 </head>
 <body>
-    <header>
-        <div class="navbar">
-            <div class="logo">
-                    <img src="/images/logo2.jpg" alt="Beta Logo">
-                </div>
-                <a href="/">BETA TELEMEDICS</a>
-            <nav>
-                <ul class="nav-list">
-                    <li><a href="/">Home</a></li>
-                    <li><a href="/services">Services</a></li>
-                    <li><a href="/doctors">Doctors</a></li>
-                    <li><a href="/about">My Appointments</a></li>
-                    <li><a href="/contact">Contact</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
-
+    <%- include("partials/header.ejs") %>
     <main>
         <!-- Hero Section -->
         <section class="hero">
@@ -39,7 +22,6 @@
 
         <!-- Services Section -->
         <section class="services">
-            <div>back-ground <img src="images/tele9.jpg" alt=""></div>
             <h2>Our Services</h2>
             <div class="services-container">
                 <div class="service-item">
@@ -85,7 +67,7 @@
         <!-- Call to Action -->
         <section class="cta">
             <h2>Ready to take control of your health?</h2>
-            <a href="/register" class="btn-primary">Join Us Today</a>
+            <a href="/signup" class="btn-primary">Join Us Today</a>
         </section>
     </main>
 

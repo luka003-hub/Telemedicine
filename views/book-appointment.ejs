@@ -8,18 +8,25 @@
 </head>
 <body>
     <form action="/book-appointment" method="POST">
-        <!-- <input type="hidden" name="userId" value="<%= userId %>"> -->
+        <input type="hidden" name="userId" value="<%= userId %>"> <!-- Ensure userId is passed correctly -->
+        
         <label for="doctor">Choose Doctor:</label>
         <select name="doctor" required>
-            <option value="Dr. Smith">Dr. Smith</option>
-            <option value="Dr. Johnson">Dr. Johnson</option>
-            <option value="Dr. Lee">Dr. Lee</option>
+            <option value="Dr. John Doe">Dr. John Doe</option>
+            <option value="Dr. Jane Smith">Dr. Jane Smith</option>
+            <!-- Add more doctors as needed -->
         </select>
+        
         <label for="date">Choose Date:</label>
         <input type="date" name="date" required>
+        
         <label for="time">Choose Time:</label>
         <input type="time" name="time" required>
+        
+        <label for="reason">Reason for Appointment:</label>
+        <textarea name="reason" required></textarea>
+        
         <button type="submit">Book Appointment</button>
     </form>
-    </body>
-    </html>
+</body>
+</html>    
