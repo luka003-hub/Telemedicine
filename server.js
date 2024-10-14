@@ -130,7 +130,9 @@ app.post('/signup', async (req, res) => {
 
         // Save the new user
         await newUser.save();
+        res.render('login');
         res.status(201).send('User registered successfully');
+        
     } catch (err) {
         console.error('Registration error:', err);
         if (err.code === 11000) {
