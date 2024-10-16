@@ -17,7 +17,7 @@ app.use('/appointments', appointmentRoutes);
 
 // Set up session middleware
 app.use(session({
-    secret: 'your_secret_key',
+    secret: '1c097f72cb818d3284e3e322f755ba35d1bc136d140dbdbf0c470462108523b17ccc84f62c6991f7b450e160c8c4b1c5c2e5433352f48883ad00cedce2e884eb',
     resave: false,
     saveUninitialized: true
 }));
@@ -130,7 +130,7 @@ app.post('/signup', async (req, res) => {
 
         // Save the new user
         await newUser.save();
-        res.render('login');
+    
         res.status(201).send('User registered successfully');
         
     } catch (err) {
@@ -142,12 +142,10 @@ app.post('/signup', async (req, res) => {
     }
 });
 
-
-
+// Route to render booking appointment page
 app.get('/book-appointment', isAuthenticated, (req, res) => {
-    res.render('book-appointment'); // This renders your booking appointment page
+    res.render('book-appointment'); 
 });
-
 
 
 passport.use(new LocalStrategy(
