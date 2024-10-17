@@ -21,7 +21,7 @@ router.post('/book', isAuthenticated, async (req, res) => {
         });
         
         await newAppointment.save();
-        res.redirect('/my-appointments'); // Redirect user to their appointments
+        res.redirect('/MyAppointments'); // Redirect user to their appointments
     } catch (error) {
         console.error(error);
         res.status(500).send("Server Error: Unable to book appointment.");

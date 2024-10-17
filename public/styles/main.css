@@ -233,6 +233,7 @@ header nav ul li a:hover {
     display: inline-block;
     background-color: white;
     padding: 20px;
+    gap: 40px;
     margin: 15px;
     width: 300px;
     border-radius: 10px;
