@@ -15,12 +15,58 @@ const LocalStrategy = require('passport-local').Strategy;
 const app = express();
 app.use('/appointments', appointmentRoutes);
 
+
 // Set up session middleware
 app.use(session({
     secret: '1c097f72cb818d3284e3e322f755ba35d1bc136d140dbdbf0c470462108523b17ccc84f62c6991f7b450e160c8c4b1c5c2e5433352f48883ad00cedce2e884eb',
     resave: false,
     saveUninitialized: true
 }));
+
+// Middleware setup
+app.use(express.static("public"));
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+//Passport configuration for user authentication
+passport.use(new LocalStrategy(
+    async (email, password, done) => {
+        try {
+            const user = await User.findOne({ email: email });
+            if (!user) {
+                return done(null, false, { message: 'Incorrect username.' });
+            }
+
+            const isMatch = await bcrypt.compare(password, user.password);
+            if (!isMatch) {
+                return done(null, false, { message: 'Incorrect password.' });
+            }
+
+            return done(null, user);
+        } catch (error) {
+            return done(error);
+        }
+    }
+));
+
+passport.serializeUser((user, cb) => {
+    cb(null, user.id);
+});
+
+passport.deserializeUser(async (id, cb) => {
+    try {
+        const result = await db.query("SELECT * FROM users WHERE id = $1", [id]);
+        const user = result.rows[0];
+        cb(null, user);
+    } catch (error) {
+        cb(error);
+    }
+});
+
 
 // Initialize passport
 app.use(passport.initialize());
@@ -41,11 +87,13 @@ app.use(express.json());
 // Serve static files from the 'public' directory
 app.use(express.static('public'));
 
-// View engine to EJS
-app.set('view engine', 'ejs');
 
 // Views directory
 app.set('views', __dirname + '/views'); 
+
+
+
+
 
 // MongoDB connection URI 
 const mongoURI = 'mongodb://localhost:27017/Beta'; 
@@ -82,12 +130,12 @@ app.post('/login', async (req, res) => {
         // Check if user is found
         if (!user) {
             console.log('User not found:', email);
-            return res.status(401).send('Invalid email or password'); // User not found
+            return res.status(401).send('User not found'); 
         }
 
         // Check password
-        const isMatch = await bcrypt.compare(password, user.password);
-
+        const isMatch = await bcrypt.compare(password, user.password)
+        
         if (isMatch) {
             req.login(user, (err) => {
                 if (err) {
@@ -130,6 +178,7 @@ app.post('/signup', async (req, res) => {
 
         // Save the new user
         await newUser.save();
+        
     
         res.status(201).send('User registered successfully');
         
