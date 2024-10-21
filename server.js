@@ -128,6 +128,16 @@ router.post('/book', async (req, res) => {
     }
 });
 
+router.get('/my-appointments', isAuthenticated, async (req, res) => {
+    try {
+        const appointments = await Appointment.find({ userId: req.user._id }).populate('doctor');
+        res.render('my-appointments', { appointments });
+    } catch (error) {
+        console.error('Error fetching appointments:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
 module.exports = router;
 
 app.set('view engine', 'ejs');

@@ -1,4 +1,17 @@
 /* General form styling */
+
+body {
+    background-image: url('images/3.jpg'); 
+    background-size: cover; 
+    background-position: center; 
+    background-repeat: no-repeat; 
+    height: 100vh; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    color: rgb(70, 148, 179); 
+}
+
 form {
     width: 50%;
     margin: 20px auto;
@@ -26,7 +39,7 @@ form input, form textarea {
 }
 
 form input[type="datetime-local"] {
-    padding: 8px;
+    padding: 20px;
 }
 
 form button {
