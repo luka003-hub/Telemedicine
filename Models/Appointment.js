@@ -1,29 +1,11 @@
 const mongoose = require('mongoose');
 
 const appointmentSchema = new mongoose.Schema({
-    userId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        required: true,
-    },
-    doctor: {
-        type: String,
-        required: true,
-    },
-    date: {
-        type: Date,
-        required: true,
-    },
-    time: {
-        type: String,
-        required: true,
-    },
-    reason: {
-        type: String,
-        required: true,
-    },
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    doctor: { type: String, required: true },
+    date: { type: Date, default: Date.now },
 });
 
 const Appointment = mongoose.model('Appointment', appointmentSchema);
 
-module.exports = Appointment;
+module.exports = Appointment; // Make sure this line is after Appointment is defined

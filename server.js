@@ -7,45 +7,42 @@ const passport = require('passport');
 const path = require('path');
 const User = require('./Models/user'); 
 const appointmentRoutes = require('./routes/appointment');
+const router = express.Router();
+const Appointment = require('./Models/Appointment');
 const { isAuthenticated } = require('./Middleware/auth'); 
 const LocalStrategy = require('passport-local').Strategy;
 
-
-// Express app
 const app = express();
 app.use('/appointments', appointmentRoutes);
 
-
-// Set up session middleware
+// Session middleware
 app.use(session({
     secret: '1c097f72cb818d3284e3e322f755ba35d1bc136d140dbdbf0c470462108523b17ccc84f62c6991f7b450e160c8c4b1c5c2e5433352f48883ad00cedce2e884eb',
     resave: false,
     saveUninitialized: true
 }));
 
-// Middleware setup
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-
+// Passport Initialization
 app.use(passport.initialize());
 app.use(passport.session());
 
-//Passport configuration for user authentication
+// Passport configuration
 passport.use(new LocalStrategy(
+    { usernameField: 'email' }, // Specify that 'email' should be used as the username
     async (email, password, done) => {
         try {
-            const user = await User.findOne({ email: email });
+            const user = await User.findOne({ email });
             if (!user) {
-                return done(null, false, { message: 'Incorrect username.' });
+                return done(null, false, { message: 'Incorrect email.' });
             }
-
             const isMatch = await bcrypt.compare(password, user.password);
             if (!isMatch) {
                 return done(null, false, { message: 'Incorrect password.' });
             }
-
             return done(null, user);
         } catch (error) {
             return done(error);
@@ -53,191 +50,89 @@ passport.use(new LocalStrategy(
     }
 ));
 
-passport.serializeUser((user, cb) => {
-    cb(null, user.id);
+passport.serializeUser((user, done) => {
+    done(null, user.id);
 });
 
-passport.deserializeUser(async (id, cb) => {
+passport.deserializeUser(async (id, done) => {
     try {
-        const result = await db.query("SELECT * FROM users WHERE id = $1", [id]);
-        const user = result.rows[0];
-        cb(null, user);
+        const user = await User.findById(id);
+        done(null, user);
     } catch (error) {
-        cb(error);
+        done(error);
     }
 });
 
-
-// Initialize passport
-app.use(passport.initialize());
-app.use(passport.session());
-
-// Set view engine
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
-
-// Serve static files
-app.use(express.static(path.join(__dirname, 'public')));
-
-
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
-
-
-// Serve static files from the 'public' directory
-app.use(express.static('public'));
-
-
-// Views directory
-app.set('views', __dirname + '/views'); 
-
-
-
-
-
-// MongoDB connection URI 
+// MongoDB connection
 const mongoURI = 'mongodb://localhost:27017/Beta'; 
+mongoose.connect(mongoURI)
+    .then(() => console.log('Connected to MongoDB successfully!'))
+    .catch(err => console.error('Error connecting to MongoDB:', err.message));
 
-// Connect to MongoDB 
-mongoose.connect(mongoURI, {
-}).then(() => {
-    console.log('Connected to MongoDB successfully!');
-}).catch((err) => {
-    console.error('Error connecting to MongoDB:', err.message);
-});
-
-// Route to render the index page
+// Routes
 app.get('/', (req, res) => {
     res.render('index'); 
 });
 
-// Route to render login page
 app.get('/login', (req, res) => {
     res.render('login'); 
 });
 
-
-// login page
-app.post('/login', async (req, res) => {
-    const { email, password } = req.body;
-
-    console.log('Login attempt with email:', email); // Log email attempt
-
-    try {
-        // Find user in the database
-        const user = await User.findOne({ email });
-
-        // Check if user is found
-        if (!user) {
-            console.log('User not found:', email);
-            return res.status(401).send('User not found'); 
-        }
-
-        // Check password
-        const isMatch = await bcrypt.compare(password, user.password)
-        
-        if (isMatch) {
-            req.login(user, (err) => {
-                if (err) {
-                    console.error('Login error:', err);
-                    return res.status(500).send('Login error'); // Handle login error
-                }
-                console.log('User logged in successfully:', user.email); // Log successful login
-                return res.redirect('/book-appointment'); // Redirect to booking after login
-            });
-        } else {
-            console.log('Password does not match for user:', email);
-            return res.status(401).send('Invalid email or password'); // Password does not match
-        }
-    } catch (err) {
-        console.error('Database error:', err);
-        return res.status(500).send('Internal Server Error'); // Handle database error
-    }
-});
-
-// Signup route
+app.post('/login', passport.authenticate('local', {
+    successRedirect: '/',
+    failureRedirect: 'signup',
+}));
 
 app.get('/signup', (req, res) => {
      res.render('signup');
 });
 
-// Render the signup form
 app.post('/signup', async (req, res) => {
     const { email, password } = req.body;
-
     try {
-        // Check if user already exists
         const existingUser = await User.findOne({ email });
         if (existingUser) {
             return res.status(400).send('User already exists with this email address');
         }
-
-        // Hash the password
         const hashedPassword = await bcrypt.hash(password, 10);
         const newUser = new User({ email, password: hashedPassword });
-
-        // Save the new user
         await newUser.save();
-        
-    
         res.status(201).send('User registered successfully');
-        
     } catch (err) {
         console.error('Registration error:', err);
-        if (err.code === 11000) {
-            return res.status(400).send('User already exists with this email address');
-        }
         res.status(500).send('Internal Server Error');
     }
 });
 
 // Route to render booking appointment page
 app.get('/book-appointment', isAuthenticated, (req, res) => {
-    res.render('book-appointment'); 
+    // Pass the logged-in user's ID to the EJS template
+    res.render('book-appointment', { userId: req.user._id });
 });
 
+router.post('/book', async (req, res) => {
+    const { userId, doctor } = req.body;
 
-passport.use(new LocalStrategy(
-    async (username, password, done) => {
-        try {
-            const user = await User.findOne({ email: username }); // Look for the user by email
-            if (!user) {
-                return done(null, false, { message: 'Incorrect username.' }); // User not found
-            }
-
-            // Compare the provided password with the stored hash
-            const isMatch = await bcrypt.compare(password, user.password);
-            if (!isMatch) {
-                return done(null, false, { message: 'Incorrect password.' }); // Password mismatch
-            }
-
-            return done(null, user); // Authentication successful
-        } catch (error) {
-            return done(error); // Error occurred
-        }
-    }
-));
-
-// Serialize user into the session
-passport.serializeUser((user, done) => {
-    done(null, user.id); // Store the user's ID in the session
-});
-
-// Deserialize user from the session
-passport.deserializeUser(async (id, done) => {
     try {
-        const user = await User.findById(id); // Find the user by ID
-        done(null, user); // Pass the user object to the session
-    } catch (error) {
-        done(error); // Error occurred
+        const newAppointment = new Appointment({
+            userId,
+            doctor,
+            date: new Date(),
+        });
+
+        await newAppointment.save();
+        res.status(201).send('Appointment booked successfully!');
+    } catch (err) {
+        console.error('Error booking appointment:', err);
+        res.status(500).send('Internal Server Error');
     }
 });
 
+module.exports = router;
 
-// Set up EJS for rendering
 app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
 
-// Start Express server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

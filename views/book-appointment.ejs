@@ -8,13 +8,12 @@
 </head>
 <body>
     <form action="/book-appointment" method="POST">
-        <input type="hidden" name="userId" value="<%= userId %>"> <!-- Use the user ID if needed -->
-    
+        <input type="hidden" name="userId" value="<%= userId %>"> 
         <label for="doctor">Choose Doctor:</label>
         <select name="doctor" required>
             <option value="Dr. Smith">Dr. Smith</option>
             <option value="Dr. Johnson">Dr. Johnson</option>
-            <!-- Add more options as needed -->
+           
         </select>
     
         <label for="date">Choose Date:</label>
