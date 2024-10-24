@@ -8,4 +8,4 @@ const appointmentSchema = new mongoose.Schema({
 
 const Appointment = mongoose.model('Appointment', appointmentSchema);
 
-module.exports = Appointment; // Make sure this line is after Appointment is defined
+module.exports = Appointment; 
