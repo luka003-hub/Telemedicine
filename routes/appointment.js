@@ -1,14 +1,11 @@
+const Appointment = require('./Models/Appointment');
 const express = require('express');
 const router = express.Router();
-const Appointment = require('./Models/appointment');
-const { isAuthenticated } = require('./Middleware/auth');
-const { bookAppointment, getUserAppointments } = require('./controllers/appointmentController');
+const { isAuthenticated } = require('../Middleware/auth');
 
-
-// Route to handle booking an appointment (POST request)
-router.post('/book-appointment', bookAppointment);
-
-// Route to get appointments for a specific user (GET request)
-router.get('/my-appointments', getUserAppointments);
+router.post('/book', isAuthenticated, bookAppointment);
+router.get('/my-appointments', isAuthenticated, getUserAppointments);
+router.get('/:appointmentId', isAuthenticated, getAppointmentById);
+router.delete('/:appointmentId/cancel', isAuthenticated, cancelAppointment);
 
 module.exports = router;
