@@ -1,31 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const Appointment = require('../Models/Appointment');
-const { isAuthenticated } = require('../Middleware/auth');
+const Appointment = require('./models/Appointment');
+const { isAuthenticated } = require('./Middleware/auth');
+const { bookAppointment, getUserAppointments } = require('./controllers/appointmentController');
 
-// Route to render the booking form
-router.get('/book', isAuthenticated, (req, res) => {
-    res.render('book-appointment', { user: req.user });
-});
 
-// Route to handle form submission
-router.post('/book', isAuthenticated, async (req, res) => {
-    const { doctorName, appointmentDate, reason } = req.body;
-    
-    try {
-        const newAppointment = new Appointment({
-            userId: req.user._id,
-            doctorName,
-            appointmentDate,
-            reason
-        });
-        
-        await newAppointment.save();
-        res.redirect('/MyAppointments'); // Redirect user to their appointments
-    } catch (error) {
-        console.error(error);
-        res.status(500).send("Server Error: Unable to book appointment.");
-    }
-});
+// Route to handle booking an appointment (POST request)
+router.post('/book-appointment', bookAppointment);
+
+// Route to get appointments for a specific user (GET request)
+router.get('/my-appointments', getUserAppointments);
 
 module.exports = router;
