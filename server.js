@@ -5,15 +5,14 @@ const session = require('express-session');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 const path = require('path');
-const User = require('./models/user'); 
+const User = require('./Models/user'); 
 const appointmentRoutes = require('./routes/appointment');
 const router = express.Router();
-const Appointment = require('./models/appointment');
 const { isAuthenticated } = require('./Middleware/auth'); 
 const LocalStrategy = require('passport-local').Strategy;
 
 const app = express();
-app.use('/appointments', appointmentRoutes);
+app.use('/Appointments', appointmentRoutes);
 
 // Session middleware
 app.use(session({
