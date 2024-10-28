@@ -7,12 +7,13 @@ const passport = require('passport');
 const path = require('path');
 const User = require('./Models/user'); 
 const Appointment = require('./Models/Appointment');
+const appointmentRoutes = require('./routes/appointment');
 const router = express.Router();
 const { isAuthenticated } = require('./Middleware/auth'); 
 const LocalStrategy = require('passport-local').Strategy;
 
 const app = express();
-
+app.use('/appointments', appointmentRoutes);
 
 // Session middleware
 app.use(session({
