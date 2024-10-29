@@ -1,5 +1,4 @@
-
-const Appointment = require('./models/Appointment');
+const Appointment = require('../Models/Appointment');
 
 // Controller to get user-specific appointments
 exports.getUserAppointments = async (req, res) => {
@@ -11,6 +10,7 @@ exports.getUserAppointments = async (req, res) => {
         res.status(500).send('Server Error');
     }
 };
+
 exports.bookAppointment = (req, res) => {
     // Your appointment booking logic here
     res.send('Appointment booked successfully!');

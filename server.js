@@ -110,24 +110,25 @@ app.get('/book-appointment', isAuthenticated, (req, res) => {
     res.render('book-appointment', { userId: req.user._id });
 });
 
-router.post('/book', async (req, res) => {
-    const { userId, doctor } = req.body;
+app.post('/appointments/book-appointment', (req, res) => {
+    const { date, time, reason, patientId } = req.body; 
+    // Logic to book the appointment
+    const newAppointment = new Appointment({
+        date,
+        time,
+        reason,
+        patient: patientId 
+    });
 
-    try {
-        const newAppointment = new Appointment({
-            userId,
-            doctor,
-            date: new Date(),
+    newAppointment.save()
+        .then(() => {
+            res.status(201).send('Appointment booked successfully!');
+        })
+        .catch((err) => {
+            console.error(err);
+            res.status(500).send('Error booking appointment');
         });
-
-        await newAppointment.save();
-        res.status(201).send('Appointment booked successfully!');
-    } catch (err) {
-        console.error('Error booking appointment:', err);
-        res.status(500).send('Internal Server Error');
-    }
 });
-
 router.get('/my-appointments', isAuthenticated, async (req, res) => {
     try {
         const appointments = await Appointment.find({ userId: req.user._id }).populate('doctor');
