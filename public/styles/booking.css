@@ -1,7 +1,7 @@
 /* General form styling */
 
 body {
-    background-image: url('images/3.jpg'); 
+    background: url('/images/3.jpg') no-repeat center center fixed; 
     background-size: cover; 
     background-position: center; 
     background-repeat: no-repeat; 
@@ -9,7 +9,7 @@ body {
     display: flex; 
     justify-content: center; 
     align-items: center; 
-    color: rgb(70, 148, 179); 
+    color: rgb(11, 93, 126); 
 }
 
 form {
