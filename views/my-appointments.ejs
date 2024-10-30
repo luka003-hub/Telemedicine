@@ -1,11 +1,13 @@
 <<!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>My Appointments</title>
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>My Appointments</title>
+        <link rel="stylesheet" href="/styles/my-appointment.css">
+    </head>
 <body>
-    <h1>Your Appointments</h1>
+    <h1>My Appointments</h1>
     <% if (appointments.length > 0) { %>
         <ul>
             <% appointments.forEach(appointment => { %>
