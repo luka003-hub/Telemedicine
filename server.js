@@ -8,6 +8,9 @@ const path = require('path');
 const User = require('./Models/user'); 
 const appointmentRoutes = require('./routes/appointment');  
 const { isAuthenticated } = require('./Middleware/auth');
+const Appointment = require('./Models/Appointment');
+require('dotenv').config();
+
 
 
 const LocalStrategy = require('passport-local').Strategy;
@@ -15,7 +18,7 @@ const app = express();
 
 // Session middleware
 app.use(session({
-    secret: 'your_secret_key_here',
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true
 }));
@@ -58,7 +61,10 @@ passport.deserializeUser(async (id, done) => {
 });
 
 // MongoDB connection
-mongoose.connect('mongodb://localhost:27017/Beta')
+mongoose.connect(process.env.MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+})
     .then(() => console.log('Connected to MongoDB successfully!'))
     .catch(err => console.error('Error connecting to MongoDB:', err.message));
 
@@ -81,7 +87,7 @@ app.post('/book-appointment', isAuthenticated, async (req, res) => {
         });
         
         await newAppointment.save();
-        res.status(201).send('Appointment booked successfully!');
+        res.redirect('/');
     } catch (error) {
         console.error('Error booking appointment:', error.message);
         res.status(500).send('Error booking appointment');
@@ -139,5 +145,5 @@ app.set('views', path.join(__dirname, 'views'));
 // Start the server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+    console.log('Server is running on port ${PORT}');
 });
