@@ -6,7 +6,9 @@ const bodyParser = require('body-parser');
 const passport = require('passport');
 const path = require('path');
 const User = require('./Models/user'); 
-const appointmentRoutes = require('./routes/appointment');  // Import the appointment routes
+const appointmentRoutes = require('./routes/appointment');  
+const { isAuthenticated } = require('./Middleware/auth');
+
 
 const LocalStrategy = require('passport-local').Strategy;
 const app = express();
@@ -61,7 +63,41 @@ mongoose.connect('mongodb://localhost:27017/Beta')
     .catch(err => console.error('Error connecting to MongoDB:', err.message));
 
 // Routes
-app.use('/appointments', appointmentRoutes);  // Add appointment routes here
+app.use('/appointment', appointmentRoutes); 
+
+app.get('/book-appointment', isAuthenticated, (req, res) => {
+    res.render('book-appointment', { userId: req.user._id });
+});
+
+// Appointment Routes
+app.post('/book-appointment', isAuthenticated, async (req, res) => {
+    const { date, time, reason } = req.body;
+    try {
+        const newAppointment = new Appointment({
+            date,
+            time,
+            reason,
+            patient: req.user._id 
+        });
+        
+        await newAppointment.save();
+        res.status(201).send('Appointment booked successfully!');
+    } catch (error) {
+        console.error('Error booking appointment:', error.message);
+        res.status(500).send('Error booking appointment');
+    }
+});
+
+// Fetch user's booked appointments
+app.get('/my-appointments', isAuthenticated, async (req, res) => {
+    try {
+        const appointments = await Appointment.find({ patient: req.user._id });
+        res.render('my-appointments', { appointments });
+    } catch (error) {
+        console.error('Error fetching appointments:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
 
 app.get('/', (req, res) => {
     res.render('index'); 
