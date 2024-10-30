@@ -1,45 +1,23 @@
-<!DOCTYPE html>
+<<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Appointments</title>
-    <link rel="stylesheet" href="/styles/main.css"> 
 </head>
 <body>
-    <header>
-        <h1>My Appointments</h1>
-        <nav>
-            <a href="/">Home</a>
-            <a href="/book-appointment">Book an Appointment</a>
-            <a href="/logout">Logout</a>
-        </nav>
-    </header>
-    <main>
-        <section class="appointments">
-            <% if (appointments && appointments.length > 0) { %>
-                <h2>Here are your upcoming appointments:</h2>
-                <ul>
-                    <% appointments.forEach(appointment => { %>
-                        <li class="appointment-card">
-                            <h3><%= appointment.doctorName %></h3>
-                            <p>Date: <%= appointment.date %></p>
-                            <p>Time: <%= appointment.time %></p>
-                            <p>Location: <%= appointment.location %></p>
-                        </li>
-                    <% }); %>
-                </ul>
-            <% } else { %>
-                <p>No appointments found. <a href="/book-appointment">Book one now!</a></p>
-            <% } %>
-        </section>
-    </main>
-
-    <footer>
-        <p>&copy; 2024 Telemedicine. All rights reserved.</p>
-    </footer>
+    <h1>Your Appointments</h1>
+    <% if (appointments.length > 0) { %>
+        <ul>
+            <% appointments.forEach(appointment => { %>
+                <li>
+                    <strong>Date:</strong> <%= appointment.date %> <br>
+                    <strong>Time:</strong> <%= appointment.time %> <br>
+                    <strong>Reason:</strong> <%= appointment.reason %> <br>
+                </li>
+            <% }) %>
+        </ul>
+    <% } else { %>
+        <p>No appointments found.</p>
+    <% } %>
 </body>
 </html>
-
-
-
