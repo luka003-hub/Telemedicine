@@ -15,9 +15,13 @@
             <ul>
                 <li><a href="/">Home</a></li>
                 <li><a href="/my-appointments">My Appointments</a></li>
-                <li><a href="/">Doctors</a></li>
-                <li><a href="/signup"class="btn-primary">Signup</a></li>
-                <li><a href="/login" class="btn-primary">Login</a></li>
+                
+                <% if (!user) { %> 
+                    <li><a href="/login">Login</a></li>
+                    <li><a href="/signup">Sign Up</a></li>
+                <% } else { %> 
+                    <li><a href="/logout">Logout</a></li>
+                <% } %>
             </ul>
         </nav>
     </header>

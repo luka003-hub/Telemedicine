@@ -31,6 +31,11 @@ app.use(bodyParser.json());
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use((req, res, next) => {
+    res.locals.user = req.isAuthenticated() ? req.user : null; 
+    next();
+});
+
 // Passport configuration
 passport.use(new LocalStrategy(
     { usernameField: 'email' }, 
@@ -136,6 +141,15 @@ app.post('/signup', async (req, res) => {
         console.error('Registration error:', err);
         res.status(500).send('Internal Server Error');
     }
+});
+
+app.get('/logout', (req, res) => {
+    req.logout((err) => {
+        if (err) {
+            return next(err);
+        }
+        res.redirect('/login'); 
+    });
 });
 
 // Set view engine

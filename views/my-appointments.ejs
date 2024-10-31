@@ -1,25 +1,27 @@
-<<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>My Appointments</title>
-        <link rel="stylesheet" href="/styles/my-appointment.css">
-    </head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Appointments</title>
+    <link rel="stylesheet" href="/css/my-appointment.css">
+</head>
 <body>
-    <h1>My Appointments</h1>
-    <% if (appointments.length > 0) { %>
-        <ul>
+    <div class="appointments-container">
+        <h1>My Appointments</h1>
+        
+        <% if (appointments.length > 0) { %>
             <% appointments.forEach(appointment => { %>
-                <li>
-                    <strong>Date:</strong> <%= appointment.date %> <br>
-                    <strong>Time:</strong> <%= appointment.time %> <br>
-                    <strong>Reason:</strong> <%= appointment.reason %> <br>
-                </li>
+                <div class="appointment-card">
+                    <div class="appointment-header">Appointment</div>
+                    <div class="appointment-detail">Date: <span><%= new Date(appointment.date).toDateString() %></span></div>
+                    <div class="appointment-detail">Time: <span><%= appointment.time %></span></div>
+                    <div class="appointment-detail">Reason: <span><%= appointment.reason %></span></div>
+                </div>
             <% }) %>
-        </ul>
-    <% } else { %>
-        <p>No appointments found.</p>
-    <% } %>
+        <% } else { %>
+            <p>No appointments found.</p>
+        <% } %>
+    </div>
 </body>
 </html>
